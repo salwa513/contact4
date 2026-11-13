@@ -1,44 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:gravity="center_vertical"
     android:padding="12dp"
-    android:background="#FFFFFF">
+    android:gravity="center_vertical">
 
     <ImageView
-        android:id="@+id/imgContact"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
-        android:src="@drawable/ic_contact"
-        android:scaleType="centerCrop"
-        android:contentDescription="Photo du contact"/>
+        android:id="@+id/ivPhoto"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:scaleType="centerCrop" />
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="vertical"
-        android:paddingStart="15dp">
+        android:layout_marginStart="12dp">
 
         <TextView
-            android:id="@+id/txtNomPrenom"
-            android:layout_width="match_parent"
+            android:id="@+id/tvNomPrenom"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nom Prénom"
-            android:textSize="18sp"
             android:textStyle="bold"
-            android:textColor="#222222"/>
+            android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/txtTelephone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Téléphone"
-            android:textSize="15sp"
-            android:textColor="#666666"
-            android:paddingTop="5dp"/>
+            android:id="@+id/tvTel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 </LinearLayout>

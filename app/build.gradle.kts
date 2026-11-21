@@ -42,11 +42,12 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.material)
 
-    // Ajouts pour la V3
+    // Ajouts pour la V3 et V4
     implementation("androidx.fragment:fragment-ktx:1.8.5")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.7")
+    implementation("androidx.preference:preference-ktx:1.2.1")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -1,28 +1,49 @@
 package com.example.contacts2
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.contacts2.data.ContactDao
+import com.example.contacts2.data.ContactDbHelper
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class ContactsViewModel : ViewModel() {
+class ContactsViewModel(app: Application) : AndroidViewModel(app) {
 
-    private val data = mutableListOf(
-        Contact(1, "Ben Ali", "Ahmed", "20111222", "ahmed@mail.com", null, 33.8815, 10.0982),
-        Contact(2, "Trabelsi", "Sarra", "22333444", "sarra@mail.com", null, 36.8065, 10.1815),
-        Contact(3, "Mansouri", "Mohamed", "55444555", "mohamed@mail.com", null, null, null),
-        Contact(4, "Hamdi", "Amira", "99111222", "amira@mail.com", null, 35.8256, 10.6084)
-    )
+    private val dao = ContactDao(ContactDbHelper.getInstance(app))
 
-    private val _contacts = MutableLiveData<List<Contact>>(data.toList())
+    private val _contacts = MutableLiveData<List<Contact>>()
     val contacts: LiveData<List<Contact>> = _contacts
 
-    fun getById(id: Int): Contact? = data.find { it.id == id }
+    init { charger() }
 
-    fun update(c: Contact) {
-        val i = data.indexOfFirst { it.id == c.id }
-        if (i >= 0) {
-            data[i] = c
-            _contacts.value = data.toList()
+    fun charger() {
+        viewModelScope.launch {
+            _contacts.value = withContext(Dispatchers.IO) { dao.getAll() }
+        }
+    }
+
+    suspend fun getById(id: Long): Contact? =
+        withContext(Dispatchers.IO) { dao.getById(id) }
+
+    fun save(c: Contact, onDone: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            val ok = withContext(Dispatchers.IO) {
+                if (c.id == 0L) dao.insert(c) != -1L else dao.update(c) > 0
+            }
+            if (ok) charger()
+            onDone(ok)
+        }
+    }
+
+    fun delete(id: Long, onDone: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            val ok = withContext(Dispatchers.IO) { dao.delete(id) > 0 }
+            if (ok) charger()
+            onDone(ok)
         }
     }
 }
